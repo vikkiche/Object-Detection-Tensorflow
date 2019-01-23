@@ -1,1 +1,2 @@
 # Object-Detection-Tensorflow
+I implemented Object Detection using Tensorflow. This is my academic project during the study of the Scalable Machine Learning and Deep Learning dispensed at KTH during Spring term 2016-17. I used the Tensorflow model. I moved this project from bitbucket to here with latest updates. Keywords: Python(Spyder), Conda, Tensorflow, Protobuf, Numpy, Matplotlib, COCO Dataset.
