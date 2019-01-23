@@ -25,19 +25,19 @@ from utils import label_map_util
 from utils import visualization_utils as vis_util
 
 #COCO trained Model to download from tensorflow
-MODEL_NAME = 'ssd_mobilenet_v1_coco_2018_01_28'
-MODEL_FILE = MODEL_NAME + '.tar.gz'
-DOWNLOAD_BASE = 'http://download.tensorflow.org/models/object_detection/'
+M_NAME = 'ssd_mobilenet_v1_coco_2018_01_28'
+M_FILE = M_NAME + '.tar.gz'
+D_BASE = 'http://download.tensorflow.org/models/object_detection/'
  
-PATH_TO_CKPT = MODEL_NAME + '/frozen_inference_graph.pb'
+PATH_TO_CKPT = M_NAME + '/frozen_inference_graph.pb'
  
 PATH_TO_LABELS = os.path.join('data', 'mscoco_label_map.pbtxt')
  
-NUM_CLASSES = 90
+NO_CLASSES = 90
 
 opener = urllib.request.URLopener()
-opener.retrieve(DOWNLOAD_BASE + MODEL_FILE, MODEL_FILE)
-tar_file = tarfile.open(MODEL_FILE)
+opener.retrieve(D_BASE + M_FILE, M_FILE)
+tar_file = tarfile.open(M_FILE)
 for file in tar_file.getmembers():
   file_name = os.path.basename(file.name)
   if 'frozen_inference_graph.pb' in file_name:
@@ -52,7 +52,7 @@ with detection_graph.as_default():
     tf.import_graph_def(od_graph_def, name='')
     
 label_map = label_map_util.load_labelmap(PATH_TO_LABELS)
-categories = label_map_util.convert_label_map_to_categories(label_map, max_num_classes=NUM_CLASSES, use_display_name=True)
+categories = label_map_util.convert_label_map_to_categories(label_map, max_num_classes=NO_CLASSES, use_display_name=True)
 category_index = label_map_util.create_category_index(categories)
 
 def load_image_into_numpy_array(image):
@@ -115,14 +115,14 @@ for image_path in TEST_IMAGE_PATHS:
   image = Image.open(image_path)
   # the array represents of the image will be used in order to prepare the result image
   # with boxes and labels on it.
-  image_np = load_image_into_numpy_array(image)
+  image_ny = load_image_into_numpy_array(image)
   # Expand dimensions  the model expects images to have shape: [1, 0, 0, 3]
-  image_np_expanded = np.expand_dims(image_np, axis=0)
+  image_ny_expanded = np.expand_dims(image_ny, axis=0)
   # Actual detection.
-  output_dict = run_inference_for_single_image(image_np, detection_graph)
+  output_dict = run_inference_for_single_image(image_ny, detection_graph)
   # Visualization of the results of a detection.
   vis_util.visualize_boxes_and_labels_on_image_array(
-      image_np,
+      image_ny,
       output_dict['detection_boxes'],
       output_dict['detection_classes'],
       output_dict['detection_scores'],
@@ -131,6 +131,6 @@ for image_path in TEST_IMAGE_PATHS:
       use_normalized_coordinates=True,
       line_thickness=8)
   plt.figure(figsize=IMAGE_SIZE)
-  plt.imshow(image_np)
+  plt.imshow(image_ny)
 
 
